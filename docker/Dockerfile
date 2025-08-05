@@ -1,8 +1,8 @@
-# Fase 1 - Build
+# Estágio 1: Build da aplicação
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copia apenas o csproj primeiro para restaurar dependências e melhor aproveitamento do cache do Docker
+# Copia apenas o csproj primeiro para restaurar dependências e melhorar o aproveitamento do cache do Docker
 COPY src/ApiTransacoes/ApiTransacoes.csproj ApiTransacoes/
 WORKDIR /src/ApiTransacoes
 RUN dotnet restore
@@ -13,7 +13,7 @@ COPY src/ApiTransacoes/. .
 # Publica o resultado no diretório /app/publish
 RUN dotnet publish -c Release -o /app/publish --no-restore
 
-# Fase 2 - Runtime
+# Estágio 2: Execução da aplicação
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
@@ -25,7 +25,7 @@ ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
 # Executar com usuário não privilegiado
-RUN adduser -h /home/appuser -s /bin/bash -D appuser
+RUN adduser -h /home/appuser -s /bin/bash -D appuser && chown -R appuser /app
 USER appuser
 
 ENTRYPOINT ["dotnet", "ApiTransacoes.dll"]
