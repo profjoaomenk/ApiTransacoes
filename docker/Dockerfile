@@ -20,7 +20,7 @@ WORKDIR /app
 # Copia apenas os arquivos publicados do build
 COPY --from=build /app/publish .
 
-# Usa as portas como variável (facilita para alterações posteriores)
+# Configurar portas da API
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
