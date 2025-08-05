@@ -25,7 +25,8 @@ ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
 # Executar com usuário não privilegiado
-RUN adduser -h /home/appuser -s /bin/bash -D appuser && chown -R appuser /app
+RUN addgroup --system appuser && adduser --system --ingroup appuser appuser
+RUN chown -R appuser:appuser /app
 USER appuser
 
 ENTRYPOINT ["dotnet", "ApiTransacoes.dll"]
